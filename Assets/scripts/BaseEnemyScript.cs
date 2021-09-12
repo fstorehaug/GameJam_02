@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class BaseEnemyScript : MonoBehaviour
 {
-    private LiverCell nextCell;
-    private float speed = 0.1f;
+    public LiverCell nextCell;
+    private float speed = 1f;
     private int baseDamage = 5;
 
     public void initializeEnemy(LiverCell nextCell)
     {
         this.nextCell = nextCell;
         this.transform.position = nextCell.transform.position;
+        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - .2f);
     }
 
     private void Update()
@@ -21,18 +22,22 @@ public class BaseEnemyScript : MonoBehaviour
             return;
         }
 
-        if (transform.position == nextCell.transform.position)
+        UpdatePosition();
+
+        if (transform.position.x == nextCell.transform.position.x && transform.position.y == nextCell.transform.position.y)
         {
             OnCellArival();
-            findNextCell(nextCell);
+            nextCell = findNextCell(nextCell);
         }
-
-        UpdatePosition();
     }
-
     private void UpdatePosition()
     {
-        transform.position = (Vector3.MoveTowards(transform.position, nextCell.gameObject.transform.position, speed*Time.deltaTime));
+        Vector2 enemyPosition = new Vector2(transform.position.x, transform.position.y);
+        Vector2 destination = new Vector2(nextCell.gameObject.transform.position.x, nextCell.gameObject.transform.position.y);
+        Vector2 nextPosition = Vector2.MoveTowards(enemyPosition, destination, speed * Time.deltaTime);
+
+        transform.position = nextPosition;
+        transform.position = transform.position + new Vector3(0f, 0f, -0.2f);
     }
 
     private LiverCell findNextCell(LiverCell currentCell)
@@ -52,7 +57,7 @@ public class BaseEnemyScript : MonoBehaviour
             return null;
         }
 
-        return potentiallCells[Mathf.FloorToInt( Random.Range(0, potentiallCells.Count))];
+        return potentiallCells[Mathf.FloorToInt( Random.Range(0, potentiallCells.Count -1))];
     }
 
     protected virtual void OnCellArival()
@@ -81,6 +86,6 @@ public class BaseEnemyScript : MonoBehaviour
 
     public void DestroySelf()
     {
-        GameObject.Destroy(this.gameObject);
+        GameObject.DestroyImmediate(this.gameObject);
     }
 }

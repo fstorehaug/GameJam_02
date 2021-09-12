@@ -41,15 +41,14 @@ public class LiverCell : MonoBehaviour
 
     public void takeDamage(int damage)
     {
-        if (currentFat > 0)
+       
+        currentFat -= damage;
+        if(currentFat < 0)
         {
-            currentFat -= damage;
-            if(currentFat < 0)
-            {
-                currentHealth -= currentFat;
-                currentFat = 0;
-            }
+            currentHealth -= currentFat;
+            currentFat = 0;
         }
+        
         if (currentHealth < 0)
         {
             isDead = true;

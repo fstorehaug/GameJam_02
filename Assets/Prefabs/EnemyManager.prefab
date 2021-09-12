@@ -40,8 +40,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 6734773428084385383}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0908d37ec189d4f8492cc479d34a59a7, type: 3}
+  m_Script: {fileID: 11500000, guid: c00702383d416492cb427c665c9caf79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   mapGenerator: {fileID: 0}
-  enemyScript: {fileID: 2291076010055313868, guid: 0d5e2e0a7922a9e46b03b32dc6b762f1, type: 3}
+  enemyScript: {fileID: 0}

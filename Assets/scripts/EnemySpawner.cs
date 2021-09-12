@@ -7,8 +7,10 @@ public class EnemySpawner : MonoBehaviour
     public BaseEnemyScript enemyScript; 
     private int spawnX;
     private int spawnY;
-    private float spawnInterval;
+    private float spawnInterval= 2f;
     private float timeSinceLastSpawn;
+
+    BaseEnemyScript spawnedEnemy;
     // Use this for initialization
     void Start()  
     {
@@ -49,7 +51,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void spawnEnemy()
     {
-        BaseEnemyScript spawnedEnemy = Instantiate(enemyScript);
+        spawnedEnemy = Instantiate(enemyScript);
         spawnedEnemy.initializeEnemy(mapGenerator.getCellAt(spawnX, spawnY));
     }
 }
