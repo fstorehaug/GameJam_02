@@ -66,7 +66,7 @@ public class MapGeneration : MonoBehaviour
 
     public LiverCell[,] getMap()
     {
-        return _liverCells;
+        return LiverCells;
     }
 
     public int getXCells()
@@ -81,6 +81,6 @@ public class MapGeneration : MonoBehaviour
 
     public LiverCell getCellAt(int x, int y)
     {
-        return _liverCells[x, y];
+        return LiverCells[x, y];
     }
 }
