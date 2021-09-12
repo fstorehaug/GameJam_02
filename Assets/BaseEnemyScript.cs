@@ -5,15 +5,28 @@ using UnityEngine;
 public class BaseEnemyScript : MonoBehaviour
 {
     private LiverCell nextCell;
-    private float speed;
+    private float speed = 0.1f;
 
 
     private void Update()
     {
+        if (nextCell == null)
+        {
+            return;
+        }
+
         if (transform.position == nextCell.transform.position)
         {
-
+            OnCellArival();
+            findNextCell(nextCell);
         }
+
+        UpdatePosition();
+    }
+
+    private void UpdatePosition()
+    {
+        transform.position = (Vector3.MoveTowards(transform.position, nextCell.gameObject.transform.position, speed*Time.deltaTime));
     }
 
     private LiverCell findNextCell(LiverCell currentCell)
@@ -29,11 +42,31 @@ public class BaseEnemyScript : MonoBehaviour
 
         if (potentiallCells.Count == 0)
         {
+            TerminateSelf();
             return null;
         }
 
         return potentiallCells[Mathf.FloorToInt( Random.Range(0, potentiallCells.Count))];
     }
 
+    protected virtual void OnCellArival()
+    {
 
+    }
+
+    protected virtual void DealDamage(LiverCell cell)
+    {
+
+    }
+
+    protected virtual void TerminateSelf()
+    {
+        DealDamage(nextCell);
+        DestroySelf();
+    }
+
+    public void DestroySelf()
+    {
+        GameObject.Destroy(this.gameObject);
+    }
 }
