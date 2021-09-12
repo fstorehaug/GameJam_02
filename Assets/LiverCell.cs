@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LiverCelll : MonoBehaviour
+public class LiverCell : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public LiverCell[] neighbours;
+    public bool IsOpen;
+
     void Start()
     {
         

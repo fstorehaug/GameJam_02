@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Mapgen : MonoBehaviour
 {
-    public LiverCelll liverCell;
-    private LiverCelll liverCellScript;
+    public LiverCell liverCell;
+    private LiverCell liverCellScript;
 
     private void Start()
     {
