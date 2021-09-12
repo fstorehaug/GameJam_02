@@ -29,14 +29,25 @@ public class LiverCell : MonoBehaviour
         {
             return;
         }
-        isOpen = !isOpen;
-        if (isOpen)
+        isOpen = toggleWouldInduceOpenLoop() ? isOpen : !isOpen;
+        meshRenderer.material = isOpen ? _openMat : _closedMat;
+    }
+
+    private bool toggleWouldInduceOpenLoop()
+    {
+        var openNeighbours = neighbours.FindAll(n => n.isOpen);
+        foreach (var openNeighbour in openNeighbours)
         {
-            meshRenderer.material = _openMat;
-        } else
-        {
-            meshRenderer.material = _closedMat;
+            var openNeighboursNeighbours = openNeighbour.neighbours.FindAll(onn => onn.isOpen);
+            foreach (var openNeighboursNeighbour in openNeighboursNeighbours)
+            {
+                if (openNeighbours.Contains(openNeighboursNeighbour))
+                {
+                    return true;
+                }
+            }
         }
+        return false;
     }
 
     public void takeDamage(int damage)
