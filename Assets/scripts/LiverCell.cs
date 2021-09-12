@@ -1,8 +1,9 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LiverCell : MonoBehaviour
 {
-    public LiverCell[] neighbours;
+    public List<LiverCell> neighbours = new List<LiverCell>();
 
     public bool isOpen;
 

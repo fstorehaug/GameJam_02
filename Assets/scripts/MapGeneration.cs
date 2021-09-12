@@ -6,47 +6,61 @@ using UnityEngine;
 public class MapGeneration : MonoBehaviour
 {
     public LiverCell liverCell;
-    private const int XCells = 20;
-    private const int YCells = 20;
-    private readonly LiverCell[,] _liverCells = new LiverCell[XCells, YCells];
+    private const int XCells = 11;
+    private const int YCells = 11;
+    public readonly LiverCell[,] LiverCells = new LiverCell[XCells, YCells];
 
     private void Start()
+    {
+        InstantiateLiverCells();
+        PlaceLiverCells();
+        PopulateNeighbours();
+    }
+
+    private void InstantiateLiverCells()
     {
         for (var i = 0; i < XCells; i++)
         {
             for (var j = 0; j < YCells; j++)
             {
-                _liverCells[i, j] = GameObject.Instantiate(liverCell);
+                LiverCells[i, j] = GameObject.Instantiate(liverCell);
             }
         }
-
-        Place();
     }
 
-    private void Place()
+    private void PlaceLiverCells()
     {
-        for (int i = 1; i < XCells - 1; i++)
+        for (var i = 0; i < XCells; i++)
         {
-            for (int j = 1; j < YCells - 1; j++)
+            for (var j = 0; j < YCells; j++)
             {
-                _liverCells[i, j].transform.position = new Vector3(i - XCells / 2, j - YCells / 2 - 0.5f * i);
+                LiverCells[i, j].transform.position = new Vector3(i, j - 0.5f * i);
             }
         }
     }
 
-    private void PopulateNeighbours(int i, int j)
+    private void PopulateNeighbours()
     {
-        var neighbours = new LiverCell[6];   
-        neighbours[0] = _liverCells[i + 0, j + 1];
-        neighbours[1] = _liverCells[i + 1, j + 1];
-        neighbours[2] = _liverCells[i + 1, j + 0];
-        neighbours[3] = _liverCells[i + 0, j - 1];
-        neighbours[4] = _liverCells[i - 1, j - 1];
-        neighbours[5] = _liverCells[i - 1, j + 0];
+        for (var i = 0; i < XCells; i++)
+        {
+            for (var j = 0; j < YCells; j++)
+            {
+                PopulateNeighbour(LiverCells[i, j], i + 0, j + 1);
+                PopulateNeighbour(LiverCells[i, j], i + 1, j + 1);
+                PopulateNeighbour(LiverCells[i, j], i + 1, j + 0);
+                PopulateNeighbour(LiverCells[i, j], i + 0, j - 1);
+                PopulateNeighbour(LiverCells[i, j], i - 1, j - 1);
+                PopulateNeighbour(LiverCells[i, j], i - 1, j + 0);
+            }
+        }
     }
 
-    private void PopulateNeighbour(int i, int j)
+    private void PopulateNeighbour(LiverCell cell, int i, int j)
     {
-        
+        if (i > XCells || i < 0 || j > YCells || j < 0)
+        {
+            return;
+        }
+        cell.neighbours.Add(LiverCells[i, j]);
     }
 }
