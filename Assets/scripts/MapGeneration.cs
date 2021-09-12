@@ -101,6 +101,8 @@ public class MapGeneration : MonoBehaviour
     public LiverCell getCellAt(int x, int y)
     {
         return LiverCells[x, y];
+    }
+
     private void Cleanup()
     {
         foreach (var cell in LiverCells)
