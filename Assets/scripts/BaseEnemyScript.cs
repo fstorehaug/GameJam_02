@@ -6,7 +6,7 @@ public class BaseEnemyScript : MonoBehaviour
 {
     public LiverCell nextCell;
     private float speed = 1f;
-    private int baseDamage = 5;
+    private int baseDamage = 30;
 
     public void initializeEnemy(LiverCell nextCell)
     {
@@ -54,6 +54,7 @@ public class BaseEnemyScript : MonoBehaviour
         if (potentiallCells.Count == 0)
         {
             TerminateSelf();
+            nextCell = null;
             return null;
         }
 
@@ -62,7 +63,7 @@ public class BaseEnemyScript : MonoBehaviour
 
     protected virtual void OnCellArival()
     {
-
+        nextCell.takeDamage(Mathf.RoundToInt(baseDamage/10f));
     }
 
     protected virtual void DealDamage(LiverCell cell)
