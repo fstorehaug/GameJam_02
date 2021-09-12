@@ -83,6 +83,24 @@ public class MapGeneration : MonoBehaviour
         cell.neighbours.Add(LiverCells[i, j]);
     }
 
+    public LiverCell[,] getMap()
+    {
+        return LiverCells;
+    }
+
+    public int getXCells()
+    {
+        return XCells;
+    }
+
+    public int getYCells()
+    {
+        return YCells;
+    }
+
+    public LiverCell getCellAt(int x, int y)
+    {
+        return LiverCells[x, y];
     private void Cleanup()
     {
         foreach (var cell in LiverCells)
