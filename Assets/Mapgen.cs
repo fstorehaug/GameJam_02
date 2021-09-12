@@ -9,7 +9,6 @@ public class Mapgen : MonoBehaviour
 
     private void Start()
     {
-
         liverCellScript = GameObject.Instantiate(liverCell);
         
 
