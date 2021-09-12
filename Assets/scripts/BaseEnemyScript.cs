@@ -6,7 +6,7 @@ public class BaseEnemyScript : MonoBehaviour
 {
     private LiverCell nextCell;
     private float speed = 0.1f;
-
+    private int baseDamage = 5;
 
     private void Update()
     {
@@ -56,6 +56,14 @@ public class BaseEnemyScript : MonoBehaviour
 
     protected virtual void DealDamage(LiverCell cell)
     {
+        List<LiverCell> toDamage = new List<LiverCell>();
+        toDamage.Add(cell);
+        toDamage.AddRange(cell.neighbours);
+
+        foreach(LiverCell cellToDamage in toDamage)
+        {
+            cellToDamage.takeDamage(baseDamage);
+        }
 
     }
 
