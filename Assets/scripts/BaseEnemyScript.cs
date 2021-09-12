@@ -8,6 +8,12 @@ public class BaseEnemyScript : MonoBehaviour
     private float speed = 0.1f;
     private int baseDamage = 5;
 
+    public void initializeEnemy(LiverCell nextCell)
+    {
+        this.nextCell = nextCell;
+        this.transform.position = nextCell.transform.position;
+    }
+
     private void Update()
     {
         if (nextCell == null)
