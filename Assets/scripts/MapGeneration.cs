@@ -25,7 +25,9 @@ public class MapGeneration : MonoBehaviour
         {
             for (var j = 0; j < YCells; j++)
             {
-                LiverCells[i, j] = Instantiate(liverCell);
+                var cell = Instantiate(liverCell);
+                cell.name =  i + ":" + j;
+                LiverCells[i, j] = cell;
             }
         }
     }

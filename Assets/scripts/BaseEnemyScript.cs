@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class BaseEnemyScript : MonoBehaviour
 {
+    public LiverCell previousCell;
+    public LiverCell currentCell;
     public LiverCell nextCell;
+    private MapGeneration _mapGeneration;
     private float speed = 1f;
     private int baseDamage = 5;
 
-    public void initializeEnemy(LiverCell nextCell)
+    public void initializeEnemy(LiverCell spawnCell)
     {
-        this.nextCell = nextCell;
-        this.transform.position = nextCell.transform.position;
+        previousCell = spawnCell;
+        currentCell = spawnCell;
+        nextCell = spawnCell;
+        transform.position = nextCell.transform.position;
         transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - .2f);
     }
 
@@ -24,16 +29,21 @@ public class BaseEnemyScript : MonoBehaviour
 
         UpdatePosition();
 
-        if (transform.position.x == nextCell.transform.position.x && transform.position.y == nextCell.transform.position.y)
+        if (transform.position.x == nextCell.transform.position.x &&
+            transform.position.y == nextCell.transform.position.y)
         {
-            OnCellArival();
-            nextCell = findNextCell(nextCell);
+            OnCellArrival();
+            previousCell = currentCell;
+            currentCell = nextCell;
+            nextCell = findNextCell(currentCell);
         }
     }
+
     private void UpdatePosition()
     {
         Vector2 enemyPosition = new Vector2(transform.position.x, transform.position.y);
-        Vector2 destination = new Vector2(nextCell.gameObject.transform.position.x, nextCell.gameObject.transform.position.y);
+        Vector2 destination = new Vector2(nextCell.gameObject.transform.position.x,
+            nextCell.gameObject.transform.position.y);
         Vector2 nextPosition = Vector2.MoveTowards(enemyPosition, destination, speed * Time.deltaTime);
 
         transform.position = nextPosition;
@@ -42,40 +52,37 @@ public class BaseEnemyScript : MonoBehaviour
 
     private LiverCell findNextCell(LiverCell currentCell)
     {
-        List<LiverCell> potentiallCells= new List<LiverCell>();
-        foreach(LiverCell cell in currentCell.neighbours)
+        var potentialCells = new List<LiverCell>();
+        foreach (var cell in currentCell.neighbours)
         {
-            if (cell.isOpen)
+            if (cell.isOpen && cell != previousCell)
             {
-                potentiallCells.Add(cell);
+                potentialCells.Add(cell);
             }
         }
 
-        if (potentiallCells.Count == 0)
+        if (potentialCells.Count == 0)
         {
             TerminateSelf();
             return null;
         }
 
-        return potentiallCells[Mathf.FloorToInt( Random.Range(0, potentiallCells.Count -1))];
+        return potentialCells[Random.Range(0, potentialCells.Count)];
     }
 
-    protected virtual void OnCellArival()
+    protected virtual void OnCellArrival()
     {
-
     }
 
     protected virtual void DealDamage(LiverCell cell)
     {
-        List<LiverCell> toDamage = new List<LiverCell>();
-        toDamage.Add(cell);
+        var toDamage = new List<LiverCell>{cell};
         toDamage.AddRange(cell.neighbours);
 
-        foreach(LiverCell cellToDamage in toDamage)
+        foreach (var cellToDamage in toDamage)
         {
             cellToDamage.takeDamage(baseDamage);
         }
-
     }
 
     protected virtual void TerminateSelf()
@@ -86,6 +93,6 @@ public class BaseEnemyScript : MonoBehaviour
 
     public void DestroySelf()
     {
-        GameObject.DestroyImmediate(this.gameObject);
+        DestroyImmediate(gameObject);
     }
 }
