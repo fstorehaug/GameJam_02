@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   neighbours: []
-  _openMat: {fileID: 0}
-  _closedMat: {fileID: 0}
-  _deadMat: {fileID: 0}
+  _openMat: {fileID: 2100000, guid: 4d48098f9b19e7041999310ba7c30fed, type: 2}
+  _closedMat: {fileID: 2100000, guid: be51a726232a56944923c9ee4a5e9045, type: 2}
+  _deadMat: {fileID: 2100000, guid: 016a2744567705b4dab244b9e09c8931, type: 2}
   HealtMaterial: {fileID: 0}
   FattyMaterial: {fileID: 0}
   isOpen: 0

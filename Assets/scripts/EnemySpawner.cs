@@ -38,8 +38,10 @@ public class EnemySpawner : MonoBehaviour
         {
             spawnX = rng.Next(0, width);
             spawnY = rng.Next(0, height);
-            if (mapGenerator.getCellAt(spawnX, spawnY) != null)
+            LiverCell potentiallSPawn = mapGenerator.getCellAt(spawnX, spawnY);
+            if (potentiallSPawn != null)
             {
+                potentiallSPawn.ToogleCell();
                 hasFoundSpawn = true;
             }
         }
