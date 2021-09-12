@@ -1,20 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LiverCell : MonoBehaviour
 {
     public LiverCell[] neighbours;
-    public bool IsOpen;
 
-    void Start()
-    {
-        
-    }
+    public bool isOpen;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public int currentHealth = 100;
+    public int maxHealth = 100;
+
+    public int currentFat = 100;
+    public int maxFat = 100;
 }

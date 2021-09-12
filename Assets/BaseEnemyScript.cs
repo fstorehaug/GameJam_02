@@ -34,7 +34,7 @@ public class BaseEnemyScript : MonoBehaviour
         List<LiverCell> potentiallCells= new List<LiverCell>();
         foreach(LiverCell cell in currentCell.neighbours)
         {
-            if (cell.IsOpen)
+            if (cell.isOpen)
             {
                 potentiallCells.Add(cell);
             }
