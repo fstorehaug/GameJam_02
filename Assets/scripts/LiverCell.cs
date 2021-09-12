@@ -4,6 +4,19 @@ using UnityEngine;
 public class LiverCell : MonoBehaviour
 {
     public List<LiverCell> neighbours = new List<LiverCell>();
+    [SerializeField]
+    private Material _openMat;
+    [SerializeField]
+    private Material _closedMat;
+    [SerializeField]
+    private Material _deadMat;
+
+    [SerializeField]
+    private MeshRenderer HealtMaterial;
+    [SerializeField]
+    private MeshRenderer FattyMaterial;
+
+    private MeshRenderer meshRenderer;
 
     public bool isOpen = false;
     public bool isDead = false;
@@ -14,13 +27,21 @@ public class LiverCell : MonoBehaviour
     public int currentFat = 100;
     public int maxFat = 100;
 
-    public void OnMouseDown()
+    public void ToogleCell()
     {
+        Debug.Log("cell Pressed");
         if (isDead)
         {
             return;
         }
         isOpen = !isOpen;
+        if (isOpen)
+        {
+            meshRenderer.material = _openMat;
+        } else
+        {
+            meshRenderer.material = _closedMat;
+        }
     }
 
     public void takeDamage(int damage)
@@ -38,6 +59,8 @@ public class LiverCell : MonoBehaviour
         {
             isDead = true;
             isOpen = true;
+
+            meshRenderer.material = _deadMat;
         }
     }
 
