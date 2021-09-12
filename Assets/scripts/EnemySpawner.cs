@@ -6,6 +6,8 @@ public class EnemySpawner : MonoBehaviour
 {
     public MapGeneration mapGenerator;
     public BaseEnemyScript enemyScript;
+    [SerializeField]
+    private Material spawnerMat;
 
     private LiverCell spawner;
 
@@ -42,6 +44,7 @@ public class EnemySpawner : MonoBehaviour
         List<LiverCell> cells = LivingCells.getLiveCells();
         spawner = cells[Random.Range(0,cells.Count)];
         spawner.onDeath += OnSawnerDeath;
+        spawner.meshRenderer.material = spawnerMat;
     }
 
     public void spawnEnemy()

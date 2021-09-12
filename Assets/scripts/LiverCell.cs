@@ -12,7 +12,7 @@ public class LiverCell : MonoBehaviour
     [SerializeField]
     private Material _deadMat;
     [SerializeField]
-    private MeshRenderer meshRenderer;
+    public MeshRenderer meshRenderer;
 
     [SerializeField]
     private GameObject DamageIndicator;
