@@ -10,12 +10,7 @@ public class LiverCell : MonoBehaviour
     private Material _closedMat;
     [SerializeField]
     private Material _deadMat;
-
     [SerializeField]
-    private MeshRenderer HealtMaterial;
-    [SerializeField]
-    private MeshRenderer FattyMaterial;
-
     private MeshRenderer meshRenderer;
 
     public bool isOpen = false;

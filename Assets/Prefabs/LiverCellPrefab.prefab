@@ -48,8 +48,7 @@ MonoBehaviour:
   _openMat: {fileID: 2100000, guid: 4d48098f9b19e7041999310ba7c30fed, type: 2}
   _closedMat: {fileID: 2100000, guid: be51a726232a56944923c9ee4a5e9045, type: 2}
   _deadMat: {fileID: 2100000, guid: 016a2744567705b4dab244b9e09c8931, type: 2}
-  HealtMaterial: {fileID: 0}
-  FattyMaterial: {fileID: 0}
+  meshRenderer: {fileID: 9165431053487545496}
   isOpen: 0
   isDead: 0
   currentHealth: 100
@@ -180,5 +179,10 @@ GameObject:
 --- !u!4 &8032462573555836919 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ba37c7e0ab1697c408852bd5e0f86e8b, type: 3}
+  m_PrefabInstance: {fileID: 7562585400004771868}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &9165431053487545496 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: ba37c7e0ab1697c408852bd5e0f86e8b, type: 3}
   m_PrefabInstance: {fileID: 7562585400004771868}
   m_PrefabAsset: {fileID: 0}
