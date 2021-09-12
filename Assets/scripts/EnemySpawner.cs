@@ -1,23 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
     public MapGeneration mapGenerator;
-    public BaseEnemyScript enemyScript; 
-    private int spawnX;
-    private int spawnY;
+    public BaseEnemyScript enemyScript;
+
+    private LiverCell spawner;
+
     private float spawnInterval= 2f;
     private float timeSinceLastSpawn;
 
     BaseEnemyScript spawnedEnemy;
     // Use this for initialization
-    void Start()  
+
+    public void Start()
     {
-        System.Random rng = new System.Random();
-        findAndSetSpawn(mapGenerator.getXCells(), mapGenerator.getYCells());
-        spawnEnemy();
-        timeSinceLastSpawn = 0;
+        findAndSetSpawn();
+    }
+
+    public void OnSawnerDeath()
+    {
+        findAndSetSpawn();
     }
 
 
@@ -32,26 +37,16 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void findAndSetSpawn(int width, int height)
+    public void findAndSetSpawn()
     {
-        bool hasFoundSpawn = false;
-        System.Random rng = new System.Random();
-        while (!hasFoundSpawn)
-        {
-            spawnX = rng.Next(0, width);
-            spawnY = rng.Next(0, height);
-            LiverCell potentiallSPawn = mapGenerator.getCellAt(spawnX, spawnY);
-            if (potentiallSPawn != null)
-            {
-                potentiallSPawn.ToogleCell();
-                hasFoundSpawn = true;
-            }
-        }
+        List<LiverCell> cells = LivingCells.getLiveCells();
+        spawner = cells[Random.Range(0,cells.Count)];
+        spawner.onDeath += OnSawnerDeath;
     }
 
     public void spawnEnemy()
     {
         spawnedEnemy = Instantiate(enemyScript);
-        spawnedEnemy.initializeEnemy(mapGenerator.getCellAt(spawnX, spawnY));
+        spawnedEnemy.initializeEnemy(spawner);
     }
 }
