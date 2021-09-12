@@ -6,15 +6,17 @@ using UnityEngine;
 public class MapGeneration : MonoBehaviour
 {
     public LiverCell liverCell;
-    private const int XCells = 11;
-    private const int YCells = 11;
+    private const int XCells = 36;
+    private const int YCells = 41;
     public readonly LiverCell[,] LiverCells = new LiverCell[XCells, YCells];
 
-    private void Start()
+    private void Awake()
     {
         InstantiateLiverCells();
         PlaceLiverCells();
+        ShapeMap();
         PopulateNeighbours();
+        Cleanup();
     }
 
     private void InstantiateLiverCells()
@@ -23,7 +25,7 @@ public class MapGeneration : MonoBehaviour
         {
             for (var j = 0; j < YCells; j++)
             {
-                LiverCells[i, j] = GameObject.Instantiate(liverCell);
+                LiverCells[i, j] = Instantiate(liverCell);
             }
         }
     }
@@ -39,12 +41,28 @@ public class MapGeneration : MonoBehaviour
         }
     }
 
+    private void ShapeMap()
+    {
+        foreach (var cell in LiverCells)
+        {
+            if (cell.transform.position.y < 0 || cell.transform.position.y > YCells / 2.0f)
+            {
+                cell.gameObject.SetActive(false);
+            }
+        }
+    }
+
     private void PopulateNeighbours()
     {
         for (var i = 0; i < XCells; i++)
         {
             for (var j = 0; j < YCells; j++)
             {
+                if (!LiverCells[i, j].isActiveAndEnabled)
+                {
+                    continue;
+                }
+
                 PopulateNeighbour(LiverCells[i, j], i + 0, j + 1);
                 PopulateNeighbour(LiverCells[i, j], i + 1, j + 1);
                 PopulateNeighbour(LiverCells[i, j], i + 1, j + 0);
@@ -57,10 +75,11 @@ public class MapGeneration : MonoBehaviour
 
     private void PopulateNeighbour(LiverCell cell, int i, int j)
     {
-        if (i > XCells || i < 0 || j > YCells || j < 0)
+        if (i > XCells - 1 || i < 0 || j > YCells - 1 || j < 0 || !LiverCells[i,j].isActiveAndEnabled)
         {
             return;
         }
+
         cell.neighbours.Add(LiverCells[i, j]);
     }
 
@@ -82,5 +101,14 @@ public class MapGeneration : MonoBehaviour
     public LiverCell getCellAt(int x, int y)
     {
         return LiverCells[x, y];
+    private void Cleanup()
+    {
+        foreach (var cell in LiverCells)
+        {
+            if (!cell.isActiveAndEnabled)
+            {
+                DestroyImmediate(cell.gameObject);
+            }
+        }
     }
 }
