@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SettingsScriptableObject : MonoBehaviour
+[CreateAssetMenu]
+public class SettingsScriptableObject : ScriptableObject
 {
     [SerializeField]
     private static int _mapWidth;
