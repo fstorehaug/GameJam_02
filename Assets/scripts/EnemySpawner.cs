@@ -11,7 +11,7 @@ public class EnemySpawner : MonoBehaviour
 
     private LiverCell spawner;
 
-    private float spawnInterval= 2f;
+    private float spawnInterval;
     private float timeSinceLastSpawn;
 
     BaseEnemyScript spawnedEnemy;
@@ -19,6 +19,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void Start()
     {
+        ReadSpawnrateFromSettings();
         findAndSetSpawn();
     }
 
@@ -27,6 +28,11 @@ public class EnemySpawner : MonoBehaviour
         findAndSetSpawn();
     }
 
+    private void ReadSpawnrateFromSettings()
+    {
+        //Hardcoding base spawnrate to 2 is bad
+        spawnInterval = 2f / (SettingsScriptableObject.GetSpawnRate() / 100);
+    }
 
     // Update is called once per frame
     void Update()

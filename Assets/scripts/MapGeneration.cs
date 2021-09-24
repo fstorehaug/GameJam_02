@@ -6,9 +6,9 @@ using UnityEngine;
 public class MapGeneration : MonoBehaviour
 {
     public LiverCell liverCell;
-    private const int XCells = 36;
-    private const int YCells = 41;
-    public readonly LiverCell[,] LiverCells = new LiverCell[XCells, YCells];
+    private int XCells;
+    private int YCells;
+    public LiverCell[,] LiverCells;
 
     private void Awake()
     {
@@ -17,6 +17,14 @@ public class MapGeneration : MonoBehaviour
         ShapeMap();
         PopulateNeighbours();
         Cleanup();
+    }
+
+    private void ReadFromSettings()
+    {
+        //Hardcoding max height and with here is bad
+        XCells = Mathf.Clamp(SettingsScriptableObject.GetMapWidht(), 10, 100); 
+        YCells = Mathf.Clamp(SettingsScriptableObject.GetMapHeight(), 10, 60);
+        LiverCells = new LiverCell[XCells, YCells];
     }
 
     private void InstantiateLiverCells()
