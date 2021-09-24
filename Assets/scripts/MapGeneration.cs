@@ -12,6 +12,7 @@ public class MapGeneration : MonoBehaviour
 
     private void Awake()
     {
+        ReadFromSettings();
         InstantiateLiverCells();
         PlaceLiverCells();
         ShapeMap();
