@@ -50,11 +50,13 @@ MonoBehaviour:
   _openMat: {fileID: 2100000, guid: 4d48098f9b19e7041999310ba7c30fed, type: 2}
   _closedMat: {fileID: 2100000, guid: be51a726232a56944923c9ee4a5e9045, type: 2}
   _deadMat: {fileID: 2100000, guid: 016a2744567705b4dab244b9e09c8931, type: 2}
+  _unavailableMat: {fileID: 2100000, guid: 11892a4bd44954c4b94643655ec3a876, type: 2}
   meshRenderer: {fileID: 9165431053487545496}
   DamageIndicator: {fileID: 5812029250166584703}
   FatIndicator: {fileID: 4977756226631563576}
   isOpen: 0
   isDead: 0
+  isSpawner: 0
 --- !u!54 &5500907947913265130
 Rigidbody:
   m_ObjectHideFlags: 0
