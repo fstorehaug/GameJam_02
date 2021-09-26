@@ -73,7 +73,7 @@ public class BaseEnemyScript : MonoBehaviour
 
     protected virtual void OnCellArrival()
     {
-        nextCell.takeDamage(Mathf.RoundToInt(baseDamage/10f));
+        nextCell.TakeDamage(Mathf.RoundToInt(baseDamage/10f));
     }
 
     protected virtual void DealDamage(LiverCell cell)
@@ -83,7 +83,7 @@ public class BaseEnemyScript : MonoBehaviour
 
         foreach (var cellToDamage in toDamage)
         {
-            cellToDamage.takeDamage(baseDamage);
+            cellToDamage.TakeDamage(baseDamage);
         }
     }
 
