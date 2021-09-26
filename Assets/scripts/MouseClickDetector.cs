@@ -9,6 +9,6 @@ public class MouseClickDetector : MonoBehaviour
 
     private void OnMouseDown()
     {
-        liverCell.ToogleCell();
+        liverCell.ToggleCell();
     }
 }
