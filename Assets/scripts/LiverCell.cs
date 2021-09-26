@@ -7,19 +7,21 @@ public class LiverCell : MonoBehaviour
 {
     public List<LiverCell> neighbours = new List<LiverCell>();
 
-    [SerializeField] private Material _openMat;
+    [SerializeField] private Material openMat;
 
-    [SerializeField] private Material _closedMat;
+    [SerializeField] private Material closedMat;
 
-    [SerializeField] private Material _deadMat;
+    [SerializeField] private Material deadMat;
 
-    [SerializeField] private Material _unavailableMat;
+    [SerializeField] private Material unavailableMat;
 
     [SerializeField] public MeshRenderer meshRenderer;
 
-    [SerializeField] private GameObject DamageIndicator;
+    [SerializeField] private GameObject damageIndicatorPrefab;
+    private GameObject _damageIndicator;
 
-    [SerializeField] public GameObject FatIndicator;
+    [SerializeField] private GameObject fatIndicatorPrefab;
+    private GameObject _fatIndicator;
 
     public bool isOpen;
     public bool isDead;
@@ -34,15 +36,17 @@ public class LiverCell : MonoBehaviour
 
     private float _timeSinceHeal;
 
-    private int currentFat;
+    private int _currentFat;
 
-    public UnityAction onDeath;
+    public UnityAction ONDeath;
 
     private void Awake()
     {
+        _damageIndicator = Instantiate(damageIndicatorPrefab,transform);
+        _fatIndicator = Instantiate(fatIndicatorPrefab,transform);
         LivingCells.RegisterLiveCell(this);
-        UpdateIndicator(FatIndicator, currentFat, _maxFat);
-        UpdateIndicator(DamageIndicator, _damageTaken, _health);
+        UpdateIndicator(_fatIndicator, _currentFat, _maxFat);
+        UpdateIndicator(_damageIndicator, _damageTaken, _health);
     }
 
     private void Update()
@@ -52,10 +56,10 @@ public class LiverCell : MonoBehaviour
         _timeSinceHeal += Time.deltaTime;
         if (_timeSinceHeal <= _healingInterval) return;
 
-        currentFat = Mathf.Clamp(currentFat - _fatHealingValue, _damageTaken, _maxFat);
+        _currentFat = Mathf.Clamp(_currentFat - _fatHealingValue, _damageTaken, _maxFat);
         _timeSinceHeal = 0;
-        UpdateIndicator(FatIndicator, currentFat, _maxFat);
-        UpdateIndicator(DamageIndicator, _damageTaken, _health);
+        UpdateIndicator(_fatIndicator, _currentFat, _maxFat);
+        UpdateIndicator(_damageIndicator, _damageTaken, _health);
     }
 
     private void OnDestroy()
@@ -67,7 +71,7 @@ public class LiverCell : MonoBehaviour
     {
         if (isDead || isSpawner || isUnavailable) return;
         isOpen = ToggleWouldInduceOpenLoop() ? isOpen : !isOpen;
-        meshRenderer.material = isOpen ? _openMat : _closedMat;
+        meshRenderer.material = isOpen ? openMat : closedMat;
         ToggleUnavailableCells();
     }
 
@@ -78,21 +82,23 @@ public class LiverCell : MonoBehaviour
             if (neighbour.ToggleWouldInduceOpenLoop())
             {
                 neighbour.isUnavailable = true;
-                neighbour.meshRenderer.material = _unavailableMat;
+                neighbour.meshRenderer.material = unavailableMat;
             }
             else
             {
                 neighbour.isUnavailable = false;
-                neighbour.meshRenderer.material = _closedMat;
+                neighbour.meshRenderer.material = closedMat;
             }
     }
 
     private bool ToggleWouldInduceOpenLoop()
     {
         var openNeighbours = neighbours.FindAll(n => n.isOpen);
+        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
         foreach (var openNeighbour in openNeighbours)
         {
             var openNeighboursNeighbours = openNeighbour.neighbours.FindAll(onn => onn.isOpen);
+            // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
             foreach (var openNeighboursNeighbour in openNeighboursNeighbours)
                 if (openNeighbours.Contains(openNeighboursNeighbour))
                     return true;
@@ -105,24 +111,24 @@ public class LiverCell : MonoBehaviour
     {
         if (isDead) return;
 
-        currentFat += damage;
-        if (currentFat > _maxFat)
+        _currentFat += damage;
+        if (_currentFat > _maxFat)
         {
-            _damageTaken += currentFat - _maxFat;
-            currentFat = _maxFat;
+            _damageTaken += _currentFat - _maxFat;
+            _currentFat = _maxFat;
         }
 
-        UpdateIndicator(FatIndicator, currentFat, _maxFat);
-        UpdateIndicator(DamageIndicator, _damageTaken, _health);
+        UpdateIndicator(_fatIndicator, _currentFat, _maxFat);
+        UpdateIndicator(_damageIndicator, _damageTaken, _health);
 
         if (_damageTaken < _health) return;
         isDead = true;
         isOpen = false;
 
-        meshRenderer.material = _deadMat;
-        Destroy(DamageIndicator);
-        Destroy(FatIndicator);
-        onDeath?.Invoke();
+        meshRenderer.material = deadMat;
+        Destroy(_damageIndicator);
+        Destroy(_fatIndicator);
+        ONDeath?.Invoke();
         ToggleUnavailableCells();
     }
 

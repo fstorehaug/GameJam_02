@@ -1,23 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class BaseEnemyScript : MonoBehaviour
+public sealed class BaseEnemyScript : MonoBehaviour
 {
     public LiverCell previousCell;
     public LiverCell currentCell;
     public LiverCell nextCell;
-    private MapGeneration _mapGeneration;
-    private float speed = 1f;
-    private int baseDamage = 30;
+    private readonly float _speed = 1f;
+    private readonly int _baseDamage = 30;
 
-    public void initializeEnemy(LiverCell spawnCell)
+    public void InitializeEnemy(LiverCell spawnCell)
     {
         previousCell = spawnCell;
         currentCell = spawnCell;
         nextCell = spawnCell;
-        transform.position = nextCell.transform.position;
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - .2f);
+        var position = nextCell.transform.position;
+        transform.position = new Vector3(position.x, position.y, position.z - .2f);
     }
 
     private void Update()
@@ -29,71 +29,62 @@ public class BaseEnemyScript : MonoBehaviour
 
         UpdatePosition();
 
-        if (transform.position.x == nextCell.transform.position.x &&
-            transform.position.y == nextCell.transform.position.y)
-        {
-            OnCellArrival();
-            previousCell = currentCell;
-            currentCell = nextCell;
-            nextCell = findNextCell(currentCell);
-        }
+        if (!transform.position.x.Equals(nextCell.transform.position.x) ||
+            !transform.position.y.Equals(nextCell.transform.position.y)) return;
+        OnCellArrival();
+        previousCell = currentCell;
+        currentCell = nextCell;
+        nextCell = FindNextCell();
     }
 
     private void UpdatePosition()
     {
-        Vector2 enemyPosition = new Vector2(transform.position.x, transform.position.y);
-        Vector2 destination = new Vector2(nextCell.gameObject.transform.position.x,
-            nextCell.gameObject.transform.position.y);
-        Vector2 nextPosition = Vector2.MoveTowards(enemyPosition, destination, speed * Time.deltaTime);
+        var position = transform.position;
+        var currentPosition = position;
+        var destinationPosition = nextCell.transform.position;
+        var enemyPosition = new Vector2(currentPosition.x, currentPosition.y);
+        var destination = new Vector2(destinationPosition.x, destinationPosition.y);
+        var nextPosition = Vector2.MoveTowards(enemyPosition, destination, _speed * Time.deltaTime);
 
-        transform.position = nextPosition;
-        transform.position = transform.position + new Vector3(0f, 0f, -0.2f);
+        position = nextPosition;
+        transform.position = position + new Vector3(0f, 0f, -0.2f);
     }
 
-    private LiverCell findNextCell(LiverCell currentCell)
+    private LiverCell FindNextCell()
     {
-        var potentialCells = new List<LiverCell>();
-        foreach (var cell in currentCell.neighbours)
-        {
-            if (cell.isOpen && cell != previousCell)
-            {
-                potentialCells.Add(cell);
-            }
-        }
+        var potentialCells = currentCell.neighbours.Where(cell => cell.isOpen && cell != previousCell).ToList();
+        if (potentialCells.Count != 0) return potentialCells[Random.Range(0, potentialCells.Count)];
+        
+        // No cells to move to, so we explode.
+        TerminateSelf();
+        nextCell = null;
+        return null;
 
-        if (potentialCells.Count == 0)
-        {
-            TerminateSelf();
-            nextCell = null;
-            return null;
-        }
-
-        return potentialCells[Random.Range(0, potentialCells.Count)];
     }
 
-    protected virtual void OnCellArrival()
+    private void OnCellArrival()
     {
-        nextCell.TakeDamage(Mathf.RoundToInt(baseDamage/10f));
+        nextCell.TakeDamage(Mathf.RoundToInt(_baseDamage/10f));
     }
 
-    protected virtual void DealDamage(LiverCell cell)
+    private void DealDamage(LiverCell cell)
     {
         var toDamage = new List<LiverCell>{cell};
         toDamage.AddRange(cell.neighbours);
 
         foreach (var cellToDamage in toDamage)
         {
-            cellToDamage.TakeDamage(baseDamage);
+            cellToDamage.TakeDamage(_baseDamage);
         }
     }
 
-    protected virtual void TerminateSelf()
+    private void TerminateSelf()
     {
         DealDamage(nextCell);
         DestroySelf();
     }
 
-    public void DestroySelf()
+    private void DestroySelf()
     {
         DestroyImmediate(gameObject);
     }

@@ -47,16 +47,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   neighbours: []
-  _openMat: {fileID: 2100000, guid: 4d48098f9b19e7041999310ba7c30fed, type: 2}
-  _closedMat: {fileID: 2100000, guid: be51a726232a56944923c9ee4a5e9045, type: 2}
-  _deadMat: {fileID: 2100000, guid: 016a2744567705b4dab244b9e09c8931, type: 2}
-  _unavailableMat: {fileID: 2100000, guid: 11892a4bd44954c4b94643655ec3a876, type: 2}
+  openMat: {fileID: 2100000, guid: 4d48098f9b19e7041999310ba7c30fed, type: 2}
+  closedMat: {fileID: 2100000, guid: be51a726232a56944923c9ee4a5e9045, type: 2}
+  deadMat: {fileID: 2100000, guid: 016a2744567705b4dab244b9e09c8931, type: 2}
+  unavailableMat: {fileID: 2100000, guid: 11892a4bd44954c4b94643655ec3a876, type: 2}
   meshRenderer: {fileID: 9165431053487545496}
-  DamageIndicator: {fileID: 5812029250166584703}
-  FatIndicator: {fileID: 4977756226631563576}
+  damageIndicatorPrefab: {fileID: 1398612540398025914, guid: 0a5dda4b2a77e7b4984646496f44e7cc, type: 3}
+  fatIndicatorPrefab: {fileID: 1398612540398025914, guid: 2a36b27352a412347a4d9513b7d8c7a6, type: 3}
   isOpen: 0
   isDead: 0
   isSpawner: 0
+  isUnavailable: 0
 --- !u!54 &5500907947913265130
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -152,11 +153,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a5dda4b2a77e7b4984646496f44e7cc, type: 3}
---- !u!1 &5812029250166584703 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1398612540398025914, guid: 0a5dda4b2a77e7b4984646496f44e7cc, type: 3}
-  m_PrefabInstance: {fileID: 4882086152465500613}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5812029250166584688 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1398612540398025909, guid: 0a5dda4b2a77e7b4984646496f44e7cc, type: 3}
@@ -227,11 +223,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a36b27352a412347a4d9513b7d8c7a6, type: 3}
---- !u!1 &4977756226631563576 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1398612540398025914, guid: 2a36b27352a412347a4d9513b7d8c7a6, type: 3}
-  m_PrefabInstance: {fileID: 6231948722147181954}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4977756226631563575 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1398612540398025909, guid: 2a36b27352a412347a4d9513b7d8c7a6, type: 3}

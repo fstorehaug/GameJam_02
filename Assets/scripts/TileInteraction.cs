@@ -2,30 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Debug = System.Diagnostics.Debug;
 
 public class TileInteraction : MonoBehaviour
 {
-    private PlayerInput inputActions;
+    private PlayerInput _inputActions;
 
     private void Start()
     {
-        inputActions = new PlayerInput();
-        inputActions.TileInteraction.Enable();
+        _inputActions = new PlayerInput();
+        _inputActions.TileInteraction.Enable();
 
-        inputActions.TileInteraction.OpenTile.performed += OpenTile_performed;
+        _inputActions.TileInteraction.OpenTile.performed += OpenTile_performed;
 
     }
 
     private void OpenTile_performed(InputAction.CallbackContext obj)
     {
-        Ray ray = Camera.main.ScreenPointToRay(inputActions.TileInteraction.MousePosition.ReadValue<Vector2>());
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100))
+        var ray = Camera.main.ScreenPointToRay(_inputActions.TileInteraction.MousePosition.ReadValue<Vector2>());
+        if (!Physics.Raycast(ray, out var hit, 100)) return;
+        if (hit.collider.gameObject.tag.ToLower().Contains("livercell"))
         {
-            if (hit.collider.gameObject.tag.ToLower().Contains("livercell"))
-            {
-                hit.collider.gameObject.transform.parent.gameObject.GetComponent<LiverCell>().ToggleCell();
-            }
+            hit.collider.gameObject.transform.parent.gameObject.GetComponent<LiverCell>().ToggleCell();
         }
     }
 

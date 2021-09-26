@@ -7,65 +7,59 @@ using UnityEngine.SceneManagement;
 public class MainMenuScript : MonoBehaviour
 {
     [SerializeField]
-    private TMP_InputField _spawnrate;
+    private TMP_InputField spawnRate;
     [SerializeField]
-    private TMP_InputField _mapWidth;
+    private TMP_InputField mapWidth;
     [SerializeField]
-    private TMP_InputField _mapHeight;
+    private TMP_InputField mapHeight;
 
     [SerializeField]
-    private UnityEngine.UI.Button StartButton;
+    private UnityEngine.UI.Button startButton;
 
     public void Start()
     {
-        _spawnrate.text = SettingsScriptableObject.GetSpawnRate().ToString();
-        _mapWidth.text = SettingsScriptableObject.GetMapWidht().ToString();
-        _mapHeight.text = SettingsScriptableObject.GetMapHeight().ToString();
+        spawnRate.text = SettingsScriptableObject.GetSpawnRate().ToString();
+        mapWidth.text = SettingsScriptableObject.GetMapWidht().ToString();
+        mapHeight.text = SettingsScriptableObject.GetMapHeight().ToString();
     }
 
 
     public void PlayButton()
     {
-        int spawnrate;
-        int mapWidht;
-        int mapHeight;
-
-        if (!ParceToInt(_spawnrate, out spawnrate))
+        if (!ParseToInt(spawnRate, out var spawnRateOut))
         {
             return;
         }
         
-        if (!ParceToInt(_mapWidth, out mapWidht))
+        if (!ParseToInt(mapWidth, out var mapWidthOut))
         {
             return;
         }
 
-        if (!ParceToInt(_mapHeight, out mapHeight))
+        if (!ParseToInt(mapHeight, out var mapHeightOut))
         {
             return;
         }
 
-        StartButton.enabled = false;
+        startButton.enabled = false;
 
-        SettingsScriptableObject.SetMapDimentions(mapWidht, mapHeight);
-        SettingsScriptableObject.SetSpawnRate(spawnrate);
+        SettingsScriptableObject.SetMapDimentions(mapWidthOut, mapHeightOut);
+        SettingsScriptableObject.SetSpawnRate(spawnRateOut);
 
         StartGame();
     }
 
-    private void StartGame()
+    private static void StartGame()
     {
-        //Consider changing this to use the name of the seene. 
+        //Consider changing this to use the name of the scene. 
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    private bool ParceToInt(TMP_InputField toParce, out int value)
+    private static bool ParseToInt(TMP_InputField toParse, out int value)
     {
-        int output;
-
-        if (!int.TryParse(toParce.text, out output))
+        if (!int.TryParse(toParse.text, out var output))
         {
-            toParce.text = "invalid";
+            toParse.text = "invalid";
             value = -1;
             return false;
         }

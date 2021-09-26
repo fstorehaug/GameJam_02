@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class LivingCells : MonoBehaviour
 {
-    private static List<LiverCell> AliveCells = new List<LiverCell>();
+    private static readonly List<LiverCell> AliveCells = new List<LiverCell>();
 
-    public static List<LiverCell> getLiveCells()
+    public static List<LiverCell> GETLiveCells()
     {
         return new List<LiverCell>(AliveCells);
     }

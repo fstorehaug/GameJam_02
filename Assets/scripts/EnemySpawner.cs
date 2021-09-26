@@ -8,59 +8,57 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private Material spawnerMat;
 
-    private LiverCell spawner;
+    private LiverCell _spawner;
 
-    private float spawnInterval;
-    private float timeSinceLastSpawn;
+    private float _spawnInterval;
+    private float _timeSinceLastSpawn;
 
-    BaseEnemyScript spawnedEnemy;
+    private BaseEnemyScript _spawnedEnemy;
     // Use this for initialization
 
     public void Start()
     {
-        ReadSpawnrateFromSettings();
-        findAndSetSpawn();
+        ReadSpawnRateFromSettings();
+        FindAndSetSpawn();
     }
 
     private void OnSpawnerDeath()
     {
-        spawner.isSpawner = false;
-        findAndSetSpawn();
+        _spawner.isSpawner = false;
+        FindAndSetSpawn();
     }
 
-    private void ReadSpawnrateFromSettings()
+    private void ReadSpawnRateFromSettings()
     {
-        //Hardcoding base spawnrate to 2 is bad
-        spawnInterval = 2f / (SettingsScriptableObject.GetSpawnRate() / 100);
+        //Hard coding base spawn rate to 2 is bad
+        _spawnInterval = 2f / (SettingsScriptableObject.GetSpawnRate() / 100f);
     }
 
     // Update is called once per frame
     private void Update()
     {
-        timeSinceLastSpawn += Time.deltaTime;
-        if (timeSinceLastSpawn >= spawnInterval)
-        {
-            spawnEnemy();
-            timeSinceLastSpawn = 0;
-        }
+        _timeSinceLastSpawn += Time.deltaTime;
+        if (!(_timeSinceLastSpawn >= _spawnInterval)) return;
+        SpawnEnemy();
+        _timeSinceLastSpawn = 0;
     }
 
-    private void findAndSetSpawn()
+    private void FindAndSetSpawn()
     {
-        var cells = LivingCells.getLiveCells();
+        var cells = LivingCells.GETLiveCells();
         do
         { // Pick a spawner at random until we get a live cell
-            spawner = cells[Random.Range(0, cells.Count)];
-        } while (spawner.isDead);
-        spawner.onDeath += OnSpawnerDeath;
-        spawner.isOpen = true;
-        spawner.isSpawner = true;
-        spawner.meshRenderer.material = spawnerMat;
+            _spawner = cells[Random.Range(0, cells.Count)];
+        } while (_spawner.isDead);
+        _spawner.ONDeath += OnSpawnerDeath;
+        _spawner.isOpen = true;
+        _spawner.isSpawner = true;
+        _spawner.meshRenderer.material = spawnerMat;
     }
 
-    public void spawnEnemy()
+    private void SpawnEnemy()
     {
-        spawnedEnemy = Instantiate(enemyScript);
-        spawnedEnemy.initializeEnemy(spawner);
+        _spawnedEnemy = Instantiate(enemyScript);
+        _spawnedEnemy.InitializeEnemy(_spawner);
     }
 }

@@ -6,9 +6,9 @@ using UnityEngine;
 public class MapGeneration : MonoBehaviour
 {
     public LiverCell liverCell;
-    private int XCells;
-    private int YCells;
-    public LiverCell[,] LiverCells;
+    private int _xCells;
+    private int _yCells;
+    private LiverCell[,] _liverCells;
 
     private void Awake()
     {
@@ -22,41 +22,41 @@ public class MapGeneration : MonoBehaviour
 
     private void ReadFromSettings()
     {
-        //Hardcoding max height and with here is bad
-        XCells = Mathf.Clamp(SettingsScriptableObject.GetMapWidht(), 10, 100); 
-        YCells = Mathf.Clamp(SettingsScriptableObject.GetMapHeight(), 10, 60);
-        LiverCells = new LiverCell[XCells, YCells];
+        // Hard coding max height and width here is bad
+        _xCells = Mathf.Clamp(SettingsScriptableObject.GetMapWidht(), 10, 100); 
+        _yCells = Mathf.Clamp(SettingsScriptableObject.GetMapHeight(), 10, 60);
+        _liverCells = new LiverCell[_xCells, _yCells];
     }
 
     private void InstantiateLiverCells()
     {
-        for (var i = 0; i < XCells; i++)
+        for (var i = 0; i < _xCells; i++)
         {
-            for (var j = 0; j < YCells; j++)
+            for (var j = 0; j < _yCells; j++)
             {
                 var cell = Instantiate(liverCell);
                 cell.name =  i + ":" + j;
-                LiverCells[i, j] = cell;
+                _liverCells[i, j] = cell;
             }
         }
     }
 
     private void PlaceLiverCells()
     {
-        for (var i = 0; i < XCells; i++)
+        for (var i = 0; i < _xCells; i++)
         {
-            for (var j = 0; j < YCells; j++)
+            for (var j = 0; j < _yCells; j++)
             {
-                LiverCells[i, j].transform.position = new Vector3(i, j - 0.5f * i);
+                _liverCells[i, j].transform.position = new Vector3(i, j - 0.5f * i);
             }
         }
     }
 
     private void ShapeMap()
     {
-        foreach (var cell in LiverCells)
+        foreach (var cell in _liverCells)
         {
-            if (cell.transform.position.y < 0 || cell.transform.position.y > YCells / 2.0f)
+            if (cell.transform.position.y < 0 || cell.transform.position.y > _yCells / 2.0f)
             {
                 cell.gameObject.SetActive(false);
             }
@@ -65,58 +65,38 @@ public class MapGeneration : MonoBehaviour
 
     private void PopulateNeighbours()
     {
-        for (var i = 0; i < XCells; i++)
+        for (var i = 0; i < _xCells; i++)
         {
-            for (var j = 0; j < YCells; j++)
+            for (var j = 0; j < _yCells; j++)
             {
-                if (!LiverCells[i, j].isActiveAndEnabled)
+                if (!_liverCells[i, j].isActiveAndEnabled)
                 {
                     continue;
                 }
 
-                PopulateNeighbour(LiverCells[i, j], i + 0, j + 1);
-                PopulateNeighbour(LiverCells[i, j], i + 1, j + 1);
-                PopulateNeighbour(LiverCells[i, j], i + 1, j + 0);
-                PopulateNeighbour(LiverCells[i, j], i + 0, j - 1);
-                PopulateNeighbour(LiverCells[i, j], i - 1, j - 1);
-                PopulateNeighbour(LiverCells[i, j], i - 1, j + 0);
+                PopulateNeighbour(_liverCells[i, j], i + 0, j + 1);
+                PopulateNeighbour(_liverCells[i, j], i + 1, j + 1);
+                PopulateNeighbour(_liverCells[i, j], i + 1, j + 0);
+                PopulateNeighbour(_liverCells[i, j], i + 0, j - 1);
+                PopulateNeighbour(_liverCells[i, j], i - 1, j - 1);
+                PopulateNeighbour(_liverCells[i, j], i - 1, j + 0);
             }
         }
     }
 
     private void PopulateNeighbour(LiverCell cell, int i, int j)
     {
-        if (i > XCells - 1 || i < 0 || j > YCells - 1 || j < 0 || !LiverCells[i,j].isActiveAndEnabled)
+        if (i > _xCells - 1 || i < 0 || j > _yCells - 1 || j < 0 || !_liverCells[i,j].isActiveAndEnabled)
         {
             return;
         }
 
-        cell.neighbours.Add(LiverCells[i, j]);
-    }
-
-    public LiverCell[,] getMap()
-    {
-        return LiverCells;
-    }
-
-    public int getXCells()
-    {
-        return XCells;
-    }
-
-    public int getYCells()
-    {
-        return YCells;
-    }
-
-    public LiverCell getCellAt(int x, int y)
-    {
-        return LiverCells[x, y];
+        cell.neighbours.Add(_liverCells[i, j]);
     }
 
     private void Cleanup()
     {
-        foreach (var cell in LiverCells)
+        foreach (var cell in _liverCells)
         {
             if (!cell.isActiveAndEnabled)
             {
