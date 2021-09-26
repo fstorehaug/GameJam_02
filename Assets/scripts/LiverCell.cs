@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class LiverCell : MonoBehaviour
+public class LiverCell : MonoBehaviour, GraphNode<LiverCell>
 {
     public List<LiverCell> neighbours = new List<LiverCell>();
     [SerializeField]
@@ -66,22 +66,18 @@ public class LiverCell : MonoBehaviour
         {
             return;
         }
-        isOpen = ToggleWouldInduceOpenLoop() ? isOpen : !isOpen;
+        isOpen = OpeningWouldInduceLoop() ? isOpen : !isOpen;
         meshRenderer.material = isOpen ? _openMat : _closedMat;
     }
 
-    private bool ToggleWouldInduceOpenLoop()
+    private bool OpeningWouldInduceLoop()
     {
-        var openNeighbours = neighbours.FindAll(n => n.isOpen);
-        foreach (var openNeighbour in openNeighbours)
-        {
-            var openNeighboursNeighbours = openNeighbour.neighbours.FindAll(onn => onn.isOpen);
-            if (openNeighboursNeighbours.Any(openNeighboursNeighbour => openNeighbours.Contains(openNeighboursNeighbour)))
-            {
-                return true;
-            }
-        }
-        return false;
+        bool wasOpen = isOpen;
+        isOpen = true;
+        Graph<LiverCell> graph = new Graph<LiverCell>(new List<LiverCell> { this });
+        bool containsCycle = graph.ContainsCycle();
+        isOpen = wasOpen;
+        return containsCycle;
     }
 
     public void TakeDamage(int damage)
@@ -123,4 +119,8 @@ public class LiverCell : MonoBehaviour
         indicator.transform.localScale = new Vector3(scaleFactor, scaleFactor, transform.localScale.z);
     }
 
+    public List<LiverCell> GetNeighbours()
+    {
+        return neighbours.FindAll(node => node.isOpen);
+    }
 }
