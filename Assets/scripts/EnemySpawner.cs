@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public MapGeneration mapGenerator;
     public BaseEnemyScript enemyScript;
     [SerializeField]
     private Material spawnerMat;
@@ -22,14 +21,15 @@ public class EnemySpawner : MonoBehaviour
         findAndSetSpawn();
     }
 
-    public void OnSawnerDeath()
+    private void OnSpawnerDeath()
     {
+        spawner.isSpawner = false;
         findAndSetSpawn();
     }
 
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         timeSinceLastSpawn += Time.deltaTime;
         if (timeSinceLastSpawn >= spawnInterval)
@@ -39,11 +39,16 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    public void findAndSetSpawn()
+    private void findAndSetSpawn()
     {
-        List<LiverCell> cells = LivingCells.getLiveCells();
-        spawner = cells[Random.Range(0,cells.Count)];
-        spawner.onDeath += OnSawnerDeath;
+        var cells = LivingCells.getLiveCells();
+        do
+        { // Pick a spawner at random until we get a live cell
+            spawner = cells[Random.Range(0, cells.Count)];
+        } while (spawner.isDead);
+        spawner.onDeath += OnSpawnerDeath;
+        spawner.isOpen = true;
+        spawner.isSpawner = true;
         spawner.meshRenderer.material = spawnerMat;
     }
 
