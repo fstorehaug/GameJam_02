@@ -1,60 +1,77 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [CreateAssetMenu]
 public class SettingsScriptableObject : ScriptableObject
 {
     [SerializeField]
-    private static int _mapWidth;
-
+    private int _mapHeight;
     [SerializeField]
-    private static int _mapHeight;
-
+    private int _mapWidth;
     [SerializeField]
-    private static int _spawnRate;
+    private int _spawnrate;
+    
+    private static int mapWidth;
+    private static int mapHeight;
+    private static int spawnRate;
 
-    private const int _maxMapWidht = 40;
-    private const int _minMapWidth = 10;
-    private const int _defaultMapWidht = 20;
+    private const int MaxMapWidht = 40;
+    private const int MinMapWidth = 10;
+    private const int DefaultMapWidht = 20;
 
-    private const int _maxMapHeight = 40;
-    private const int _minMapHeight = 10;
-    private const int _defaultMapHeight = 20;
+    private const int MaxMapHeight = 40;
+    private const int MinMapHeight = 10;
+    private const int DefaultMapHeight = 20;
+
+    private void OnDisable()
+    {
+        _mapHeight = mapHeight;
+        _mapWidth = mapWidth;
+        _spawnrate = spawnRate;
+    }
+
+    private void OnEnable()
+    {
+        SetMapDimentions(_mapWidth, _mapHeight);
+        SetSpawnRate(_spawnrate);
+    }
+
 
     public static void SetMapDimentions(int width, int height)
     {
-        _mapHeight = Mathf.Clamp(height, _minMapHeight, _maxMapHeight);
-        _mapWidth = Mathf.Clamp(width, _minMapWidth, _maxMapWidht);
+        mapHeight = Mathf.Clamp(height, MinMapHeight, MaxMapHeight);
+        mapWidth = Mathf.Clamp(width, MinMapWidth, MaxMapWidht);
     }
 
     public static void SetSpawnRate(int spawnrate)
     {
-        _spawnRate = spawnrate;
+        spawnRate = spawnrate;
     }
 
     public static int GetMapHeight()
     {
-        if (_mapHeight < _maxMapHeight || _mapHeight > _minMapHeight)
-            _mapHeight = _defaultMapHeight;
+        if (mapHeight > MaxMapHeight || mapHeight < MinMapHeight)
+            mapHeight = DefaultMapHeight;
 
-        return _mapHeight;
+        return mapHeight;
     }
 
     public static int GetMapWidht()
     {
-        if (_mapWidth < _maxMapWidht || _mapWidth > _minMapWidth)
-            _mapWidth = _defaultMapWidht;
+        if (mapWidth > MaxMapWidht || mapWidth < MinMapWidth)
+            mapWidth = DefaultMapWidht;
 
-        return _mapWidth;
+        return mapWidth;
     }
 
     public static int GetSpawnRate()
     {
-        if (_spawnRate < 50 || _spawnRate > 500)
-            _spawnRate = 100;
+        if (spawnRate < 50 || spawnRate > 500)
+            spawnRate = 100;
 
-        return _spawnRate;
+        return spawnRate;
     }
 
 }
