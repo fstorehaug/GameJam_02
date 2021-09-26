@@ -2460,6 +2460,7 @@ GameObject:
   - component: {fileID: 8360475047346617156}
   - component: {fileID: 3467942387757179528}
   - component: {fileID: 970486671706554381}
+  - component: {fileID: 138712200863058323}
   m_Layer: 5
   m_Name: LiverIcon
   m_TagString: Untagged
@@ -2480,7 +2481,7 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5714236681133563121}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -23.3}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -25.768593}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -2524,3 +2525,19 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!111 &138712200863058323
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7393224037133493579}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 83a040082d80d8e47b3fc8094a0f96e6, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 83a040082d80d8e47b3fc8094a0f96e6, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
