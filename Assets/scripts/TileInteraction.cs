@@ -24,7 +24,7 @@ public class TileInteraction : MonoBehaviour
         {
             if (hit.collider.gameObject.tag.ToLower().Contains("livercell"))
             {
-                hit.collider.gameObject.transform.parent.gameObject.GetComponent<LiverCell>().ToogleCell();
+                hit.collider.gameObject.transform.parent.gameObject.GetComponent<LiverCell>().ToggleCell();
             }
         }
     }
