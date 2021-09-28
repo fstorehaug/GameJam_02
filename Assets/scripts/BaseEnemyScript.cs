@@ -105,6 +105,7 @@ public sealed class BaseEnemyScript : MonoBehaviour
     private void TerminateSelf()
     {
         DealDamage(nextCell);
+        StopAllCoroutines();
         DestroySelf();
     }
 
